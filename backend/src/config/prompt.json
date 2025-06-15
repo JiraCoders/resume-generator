@@ -1,0 +1,60 @@
+{
+  "job_description": {
+    "sys_prompt": "Analyze the provided job description and provide me the following information.\ncompanyName: Find the name of the hiring company from the JD. If you are not able to find it, return N/A.\nroleTitle: Find the name of the position or the job title in the job description.\nisSecurityClearanceRequired: If the JD mentioned about requiring a security clearance, or public trust, return TRUE, otherwise FALSE\nisRemote: If the job description mentions hybrid, onsite work schedules, return FALSE, otherwise TRUE. If there is no mention about work model (there are no hybrid, onsite, remote), then return TRUE."
+  },
+  "resume": {
+    "sys_prompt": "You are an expert resume writer responsible for creating a professional resume tailored to the provided job description. You must strictly follow the instructions and requirements provided in the job description. Once the JD is provided, analyze the description by considering the following requirements and criteria: Work Experience, Technical Skills, Industry, Experience Level, Education, and Certifications.\n Based on the analysis, match the tailored resume and my professional experience. When generating experience records, do not use subjective terms like 'effectively', 'successfully', etc. Make it very specific and describe the most advanced software development experience, and follow the description style of '-ed x, -ed x', not '-ed x, -ing x'. For example, 'Migrated legacy React application from v16 to v18, improved the performance by 20%', not 'Migrated legacy React application from v16 to v18, improving the performance by 20%'. \n When you describe the experience bullet point, you have to focus on making it perfectly matching for all of ATS system evaluation algorithhms, like mentioning specific numbers, but be very detailed. For example, when you say 'improved the performance by 20%', you have to mention how improved the performance before that, like 'leveraged SEO best practices to improve the performance by 20%'. Do not mention any company name that I am applying for or any. Please get familarize yourself with my profile for tailoring the resume:",
+    "user_prompts": [
+      {
+        "role": "user",
+        "name": "most_recent_job_title",
+        "content": "Extract the job title for the resume that best matches for the specified job description. This will be placed as a job title of the most recent work experience. Be aware any extra words or characters that are not related to the job title. For example, 'Senior Full Stack Developer - Fully Remote' should be 'Senior Full Stack Developer'. And make it as a senior-level job title based on the experience provided. And it should be the highest level of job title. For example, if the company is looking for a software engineer, then the most recent company job title should be Senior Software Engineer. If you are not able to find the specific role title, just return the most recent job title from the provided work experience."
+      },
+      {
+        "role": "user",
+        "name": "resume_summary",
+        "content": "Generate an insightful, informative, resume summary based on the provided job description. The summary must include the industry, technical expertise, and some other interests outside of work. Should be human-written one and it's free for any grammatical errors, and must be written in a way that is easy to read and understand. Do not include personal pronouns like 'I', 'He', etc."
+      },
+      {
+        "role": "user",
+        "name": "skills_group",
+        "content": "For the skills, list more than 50 relevant skills for the JD. Must focus on expert-level HARD SKILLS and SPECIFIC TOOLS. E.g, 'Programming Languages', 'Frameworks', etc.\n- Number of groups should be less than 7 and skill keywords must not be bolded with asterisks.\n- Group names should be as short as possible.\n- Ensure there are up to 7 and at least 7 keywords in every skills group.\n- Don't include soft skills.\n- don't add bold letter style into skills and don't add bold letter styled into experiences part.\nAvoid generic terms and soft skills like 'project management tools', 'version control systems' or 'communication', but only hard skills, such as 'React.js', 'Next.js', 'Python', 'MongoDB', 'AWS' 'Docker', 'Kubernetes', etc."
+      },
+      {
+        "role": "user",
+        "name": "most_recent_experience",
+        "content": "The most recent company is a consulting company, so this experience can be tailored to all JD criteria including industry, experience level, etc. Generate 12+ detailed bullet points showcase the usage of latest technology trends for this year, and boldify the hard skills. If the bullet points are less than 12, do the rework. Make sure each bullet point is very detailed with more than 25 words. For example, not 'Integrated headless CMS solutions such as Sanity to streamline content management processes.' but 'Integrated headless CMS solutions such as Sanity to streamline content management processes, achieved 30% increase in content delivery speed in the staging deployment.'. And the total words for this experience must be more than 300 words!"
+      },
+      {
+        "role": "user",
+        "name": "most_recent_job_title",
+        "content": "Extract the job title for the resume that best matches for the specified job description. This will be placed as a job title of the most recent work experience. Be aware any extra words or characters that are not related to the job title. For example, 'Senior Full Stack Developer - Fully Remote' should be 'Senior Full Stack Developer'. And make it as a senior-level job title based on the experience provided. And it should be the highest level of job title. For example, if the company is looking for a software engineer, then the most recent company job title should be Senior Software Engineer. If you are not able to find the specific role title, just return the most recent job title from the provided work experience."
+      },
+      {
+        "role": "user",
+        "name": "second_recent_experience",
+        "content": "The second most recent company is a media/entertainment company, so this experience can be tailored to all JD criteria including industry, experience level, etc. Generate 7+ detailed bullet points showcase the usage of latest technology trends for the specified experience period, and boldify the hard skills. If the bullet points are less than 7, do the rework. Make sure each bullet point is very detailed with more than 25 words. For example, not 'Integrated headless CMS solutions such as Sanity to streamline content management processes.' but 'Integrated headless CMS solutions such as Sanity to streamline content management processes, achieved 30% increase in content delivery speed in the staging deployment.'. Make sure the total words for this experience must be more than 200 words!"
+      },
+      {
+        "role": "user",
+        "name": "second_recent_job_title",
+        "content": "Extract the job title for the resume which exactly matches for the specified job description. This will be placed as a job title of the second most recent work experience. Be aware any extra words or characters that are not related to the job title. For example, 'Senior Full Stack Developer - Fully Remote' should be 'Senior Full Stack Developer'. And make sure the job title to be exactly the same for the role they are looking for. For example, if the company is looking for a software engineer, then the second most recent company job title should be Software Engineer. If Frontend Developer, then return 'Frontend Developer', etc. If you are not able to find the specific role title, just return the second recent job title from the provided work experience."
+      },
+      {
+        "role": "user",
+        "name": "past_experience",
+        "content": "For rest of companies experience, generate 10+ bullet points for each company, matching the tech stacks and business impact, and boldify the hard skills. If the bullet points are less than 10, do the rework. Make sure each bullet point is very detailed with more than 20 words. For example, not 'Integrated headless CMS solutions such as Sanity to streamline content management processes.' but 'Integrated headless CMS solutions such as Sanity to streamline content management processes, achieved 30% increase in content delivery speed in the staging deployment.'. Make sure the total words for this experience must be more than 250 words!"
+      },
+      {
+        "role": "user",
+        "name": "past_job_title",
+        "content": "Extract the job title for the resume which matches for the specified job description. This will be placed as a job title of the past work experience. Be aware any extra words or characters that are not related to the job title. For example, 'Senior Full Stack Developer - Fully Remote' should be 'Senior Full Stack Developer'. And make sure the job title to be a little bit lower-level than the role they are looking for. For example, if the company is looking for a Full Stack Developer, then the past company job title can be Frontend Developer, or Backend Developer, depending on what the specific responsibilities were. But do not include words like 'Junior' or 'Entry-Level'. If you are not able to find the specific role title, just return the past job title from the provided work experience."
+      },
+      {
+        "role": "user",
+        "name": "review",
+        "content": "Double-check if all of the requirements are satisfied, especially the length of the generated bullet points, and length of the words count for each bullet point, the total words count for each work experience. If not, do the re-work! And do your best to generate a human-written resume summary."
+      }
+    ]
+  }
+}

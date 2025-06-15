@@ -1,0 +1,2 @@
+pnpm frontend:lint
+pnpm backend:lint

@@ -1,0 +1,29 @@
+{
+  "name": "resume-generator",
+  "version": "2.0.0",
+  "scripts": {
+    "frontend:install": "cd frontend && pnpm install",
+    "frontend:dev": "cd frontend && pnpm dev",
+    "frontend:build": "cd frontend && pnpm build",
+    "frontend:package": "cd frontend && pnpm package",
+    "frontend:lint": "cd frontend && pnpm lint",
+    "frontend:format": "cd frontend && pnpm format",
+    "backend:install": "cd backend && pnpm install",
+    "backend:dev": "cd backend && pnpm dev",
+    "backend:build": "cd backend && pnpm build",
+    "backend:start": "cd backend && pnpm start",
+    "backend:lint": "cd backend && pnpm lint",
+    "backend:format": "cd backend && pnpm format",
+    "electron:dev": "cd electron && pnpm dev",
+    "electron:build": "cd electron && pnpm build",
+    "husky:install": "husky"
+  },
+  "keywords": [],
+  "author": "Dustin Lee <dustin.jason.lee@gmail.com>",
+  "license": "MIT",
+  "description": "Resume Generator (Extension) used to apply for jobs using tailored resumes by OpenAI.",
+  "devDependencies": {
+    "husky": "^9.1.6",
+    "pnpm": "^9.12.3"
+  }
+}
