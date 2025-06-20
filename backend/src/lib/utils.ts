@@ -2,7 +2,7 @@ import { exec } from "child_process";
 import * as fs from "fs";
 import * as path from "path";
 import { getDocOptions } from "@/config/docOptions";
-import { JobDescriptionSchema, ResumeSchema } from "@/lib/validations";
+import { JobDescriptionSchema, ResumeSchema, CoverLetterSchema } from "@/lib/validations";
 import Docxtemplater from "docxtemplater";
 import * as libre from "libreoffice-convert";
 import PizZip from "pizzip";
@@ -118,19 +118,58 @@ export async function exportResume(
 }
 
 export async function exportCoverLetter(
+    coverLetter: CoverLetterSchema,
+    name: string,
     jobDescription: JobDescriptionSchema,
-    resume: ResumeSchema,
-    userName: string,
-    templateName: string,
     folderPath: string,
 ) {
+    // Create a folder for the company
+    const companyFolderPath = createFolderWithCompanyName(folderPath, jobDescription.companyName);
+
+    const userName = name.replace(" ", "_");
+
+    // Generate the cover letter content
+    const coverLetterContent = {
+        content: `I am writing to express my interest in the ${jobDescription.roleTitle} position at ${jobDescription.companyName}.\n`
+            + `${coverLetter.content}\n` + 'Sincerely\n' + `${name}\n`
+    }
+
+
+    // Create a Word document using Docxtemplater
+    const templatePath = path.join(process.cwd(), `templates/${userName}_cover_letter_template.docx`);
+    const templateContent = fs.readFileSync(templatePath);
+    const zip = new PizZip(templateContent);
+    const doc = new Docxtemplater(zip, {
+        paragraphLoop: true,
+        linebreaks: true
+    })
+
+    // Render the template with the cover letter data
+    doc.render(coverLetterContent);
+
+    // Generate the Word document buffer
+    const buffer: Buffer = doc.getZip().generate({
+        type: "nodebuffer",
+        compression: "DEFLATE"
+    })
+
+    // Define the output file path
+    const docxOutputPath = path.resolve(
+        companyFolderPath,
+        'Cover_Letter.docx'
+    )
+
+    // Write the Word document to the file system
+    fs.writeFileSync(docxOutputPath, buffer as unknown as Uint8Array);
+
+    console.log(`Cover letter saved at: ${docxOutputPath}`);
 }
 
 export async function exportJobDescription(jobDescription: JobDescriptionSchema, content: string, folderPath: string) {
     const companyFolderPath = createFolderWithCompanyName(folderPath, jobDescription.companyName);
 
     if (!fs.existsSync(companyFolderPath)) {
-        fs.mkdirSync(companyFolderPath, { recursive: t rue });
+        fs.mkdirSync(companyFolderPath, { recursive: true });
     }
 
     const jobDescriptionPath = path.resolve(

@@ -7,17 +7,27 @@ import {
 } from "@/config/promptConfig";
 import { JobStatus } from "@/lib/enums";
 import { ResumeTailorRequestBody } from "@/lib/types";
-import { createJiracodersApplication, exportJobDescription, exportResume, isExistingCompanyName, findDeepestFolders } from "@/lib/utils";
+import { createJiracodersApplication,
+  exportJobDescription,
+  exportResume,
+  exportCoverLetter,
+  isExistingCompanyName,
+  findDeepestFolders,
+} from "@/lib/utils";
 import {
   getResumeValidationSchema,
   JobDescriptionSchema,
   jobDescriptionValidationSchema,
-  ResumeSchema
+  ResumeSchema,
+  coverLetterValidationSchema,
+  CoverLetterSchema
 } from "@/lib/validations";
 import type { Request, Response } from "express";
 import OpenAI from "openai";
 import { zodResponseFormat } from "openai/helpers/zod";
 import { ChatCompletionMessageParam } from "openai/resources";
+import * as path from 'path';
+import * as fs from 'fs';
 
 export default class ResumeController {
   static async tailorResume(req: Request, res: Response) {
@@ -37,6 +47,7 @@ export default class ResumeController {
     } = req.body as ResumeTailorRequestBody;
     const openAI = new OpenAI({ apiKey });
     const userMessages = prompt.resume.user_prompts as ChatCompletionMessageParam[];
+    const coverLetterUserPrmpts = prompt.cover_letter.user_prompts as ChatCompletionMessageParam[];
     const resumeValidationSchema = getResumeValidationSchema(experience);
 
     try {
@@ -102,11 +113,29 @@ export default class ResumeController {
 
       const resume: ResumeSchema = JSON.parse(resumeCompletion.choices[0].message.content!);
 
+      // Generate Cover Letter
+      const coverLetterCompletion = await openAI.beta.chat.completions.parse({
+        model: OPENAI_MODEL_NAME,
+        temperature: OPENAI_TEMPERATURE,
+        max_tokens: OPENAI_MAX_TOKENS,
+        messages: [
+          {
+            role: "system",
+            content: prompt.cover_letter.sys_prompt
+          },
+          ...coverLetterUserPrmpts
+        ],
+        response_format: zodResponseFormat(coverLetterValidationSchema, ZOD_RESPONSE_FORMAT_NAME)
+      })
+
+      const coverLetter: CoverLetterSchema = JSON.parse(coverLetterCompletion.choices[0].message.content!);
+
       const date = new Date();
       const currentDate = (date.getMonth() + 1) + "." + date.getDate();
 
       await exportResume(jobDescription, resume, name, template, folderPath + `/${currentDate}`, isConvertPDF, isOpenResume);
       await exportJobDescription(jobDescription, description, folderPath + `/${currentDate}`);
+      await exportCoverLetter(coverLetter, name, jobDescription, folderPath + `/${currentDate}`);
       await createJiracodersApplication(jobDescription.companyName, jobDescription.roleTitle);
 
       res.json({

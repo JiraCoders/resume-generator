@@ -31,5 +31,12 @@ export const jobDescriptionValidationSchema = z.object({
   isRemote: z.boolean()
 });
 
+export const coverLetterValidationSchema = z.object({
+  companyName: z.string(),
+  content: z.string(),
+  name: z.string()
+});
+
 export type JobDescriptionSchema = z.infer<typeof jobDescriptionValidationSchema>;
 export type ResumeSchema = z.infer<ReturnType<typeof getResumeValidationSchema>>;
+export type CoverLetterSchema = z.infer<typeof coverLetterValidationSchema>;
