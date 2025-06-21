@@ -7,7 +7,8 @@ import {
 } from "@/config/promptConfig";
 import { JobStatus } from "@/lib/enums";
 import { ResumeTailorRequestBody } from "@/lib/types";
-import { createJiracodersApplication,
+import {
+  createJiracodersApplication,
   exportJobDescription,
   exportResume,
   exportCoverLetter,
@@ -26,8 +27,6 @@ import type { Request, Response } from "express";
 import OpenAI from "openai";
 import { zodResponseFormat } from "openai/helpers/zod";
 import { ChatCompletionMessageParam } from "openai/resources";
-import * as path from 'path';
-import * as fs from 'fs';
 
 export default class ResumeController {
   static async tailorResume(req: Request, res: Response) {

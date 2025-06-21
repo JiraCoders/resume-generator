@@ -32,9 +32,8 @@ export const jobDescriptionValidationSchema = z.object({
 });
 
 export const coverLetterValidationSchema = z.object({
-  companyName: z.string(),
+  name: z.string(),
   content: z.string(),
-  name: z.string()
 });
 
 export type JobDescriptionSchema = z.infer<typeof jobDescriptionValidationSchema>;
